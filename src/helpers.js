@@ -1,5 +1,3 @@
-import { loadavg } from "os";
-
 function createElement(tag, props, ...children) {
     const element = document.createElement(tag);
 
@@ -27,14 +25,14 @@ class EventEmitter {
         this.events = {};
     }
 
-    on(type, callback) {
+    on(type, listener) {
         this.events[type] = this.events[type] || [];
-        this.events[type].push(callback);
+        this.events[type].push(listener);
     }
 
     emit(type, arg) {
         if (this.events[type]) {
-            this.events[type].forEach(callback => callback(arg));
+            this.events[type].forEach(listener => listener(arg));
         }
     }
 }
