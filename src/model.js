@@ -1,36 +1,38 @@
-import { EventEmitter } from './helpers.js';
-
+import { EventEmitter } from './helpers';
 
 class Model extends EventEmitter {
-    constructor(state = []) {
+    constructor(items = []) {
         super();
         
-        this.state = state;
+        this.items = items;
     }
 
     getItem(id) {
-        return this.state.find(item => item.id == id);
+        return this.items.find(item => item.id == id);
     }
 
     addItem(item) {
-        this.state.push(item);
-
+        this.items.push(item);
+        this.emit('change', this.items);
         return item;
     }
 
     updateItem(id, data) {
-        const item = this.getItem(id);                                  //находим объект
-        console.log(data)
-        Object.keys(data).forEach(prop => item[prop] = data[prop]);    //изменяем объект
+        const item = this.getItem(id);
 
-        return item;                                                    //обратно возвращаем объект
+        Object.keys(data).forEach(prop => item[prop] = data[prop]);
+
+        this.emit('change', this.items);
+        
+        return item;
     }
 
     removeItem(id) {
-        const index = this.state.findIndex(item => item.id == id);
-
-        if(index > -1) {
-            this.state.splice(index, 1)
+        const index = this.items.findIndex(item => item.id == id);
+        
+        if (index > -1) {
+            this.items.splice(index, 1);
+            this.emit('change', this.items);
         }
     }
 }
